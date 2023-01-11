@@ -41,8 +41,8 @@ const MoviePage = () => {
   const movies = data?.results || [];
 
   useEffect(() => {
-    if (!data || !data.total_pages) return;
-    setPageCount(Math.ceil(data.total_pages / itemsPerPage));
+    if (!data || !data.total_results) return;
+    setPageCount(Math.ceil(data.total_results / itemsPerPage));
   }, [data, itemOffset]);
   // Invoke when user click to request another page.
   const handlePageClick = (event) => {
