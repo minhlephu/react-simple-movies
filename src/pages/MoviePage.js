@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
-import MovieCard from "../components/movie/MovieCard";
+import MovieCard, { MovieCardSkeleton } from "../components/movie/MovieCard";
 import MovieList from "../components/movie/MovieList";
 import { fetcher, tmdbAPI } from "../config";
 import useDebounce from "../hooks/useDebounce";
 import ReactPaginate from "react-paginate";
+import { v4 } from "uuid";
 //https://api.themoviedb.org/3/search/company?api_key=<<api_key>>
 
 const pageCount = 5;
@@ -73,8 +74,15 @@ const MoviePage = () => {
           </svg>
         </button>
       </div>
-      {loading && (
+      {/* {loading && (
         <div className="w-10 h-10 mx-auto border-4 border-t-4 rounded-full border-primary border-t-transparent animate-spin"></div>
+      )} */}
+      {loading && (
+        <div className="grid grid-cols-4 gap-10">
+          {new Array(itemsPerPage).fill(0).map(() => (
+            <MovieCardSkeleton key={v4()}></MovieCardSkeleton>
+          ))}
+        </div>
       )}
       <div className="grid grid-cols-4 gap-10">
         {!loading &&

@@ -2,7 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { tmdbAPI } from "../../config";
 import Button from "../button.js/Button";
-
+import PropTypes from "prop-types";
+import { withErrorBoundary } from "react-error-boundary";
+import LoadingSkeleton from "loading/LoadingSkeleton";
 const MovieCard = ({ item }) => {
   const { title, vote_average, poster_path, release_date, id } = item;
   const navigate = useNavigate();
@@ -24,5 +26,52 @@ const MovieCard = ({ item }) => {
     </div>
   );
 };
-
-export default MovieCard;
+MovieCard.propTypes = {
+  item: PropTypes.shape({
+    title: PropTypes.string,
+    vote_average: PropTypes.number,
+    poster_path: PropTypes.string,
+    release_date: PropTypes.string,
+    id: PropTypes.string,
+  }),
+};
+function FallbackComponent() {
+  return (
+    <p className="text-red-400 bg-red-50">Something error with components</p>
+  );
+}
+export default withErrorBoundary(MovieCard, {
+  FallbackComponent,
+});
+export const MovieCardSkeleton = () => {
+  return (
+    <div className="flex flex-col h-full p-3 text-white rounded-lg movie-cart bg-slate-800">
+      <LoadingSkeleton
+        width="100%"
+        height="250px"
+        radius="8px"
+        className="mb-5"
+      ></LoadingSkeleton>
+      <div className="flex flex-col flex-1">
+        <h3 className="mb-3 text-xl font-bold ">
+          <LoadingSkeleton width="100%" height="20px"></LoadingSkeleton>
+        </h3>
+        <div className="flex items-center justify-between mb-10 text-sm opacity-50">
+          <span>
+            {" "}
+            <LoadingSkeleton width="50px" height="10px"></LoadingSkeleton>
+          </span>
+          <span>
+            {" "}
+            <LoadingSkeleton width="30px" height="10px"></LoadingSkeleton>
+          </span>
+        </div>
+        <LoadingSkeleton
+          width="100%"
+          height="40px"
+          radius="6px"
+        ></LoadingSkeleton>
+      </div>
+    </div>
+  );
+};
